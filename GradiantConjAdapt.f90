@@ -44,28 +44,40 @@ contains
     deallocate(w)
     deallocate(d)
     
-  end subroutine gradconj
+  end subroutine gradconjA
 
 
-  function matvecA(P,X)
+  function matvecA(alpha,beta,gamma,Nx,X)
     !compute A(matrix of problem)X
     implicit none
     !table of parameter(dt,Lx,Ly,Nx,Ny,D)
-    real*8,intent(in),dimension(4)::P 
-    real*8,intent(in),dimension(:)::X
-    real*8,dimension(size(X))::matvec
+    real(wp),intent(in)::alpha,beta,gamma 
+    real(wp),intent(in),dimension(:)::X
+    real(wp),dimension(size(X))::matvec
     integer::i,j
-    real(wp)::alpha,beta,gamma,dx,dy
-
-    dx=P(2)/(1+P(4))
-    dy=P(3)/(1+P(5))
-
-    alpha=1./P(1)+(2*P(4))/dx**2+(2*P(4))/dy**2
-    beta=-P(4)/dx**2
-    gamma=-P(4)/dy**2
     
-    matvecA(mod(i,Nx))=alpha*X(mod(i,Nx))+beta*X(mod(i+2),Nx))+gamma*X(mod(i,Nx))
-    !do from 2 to Nx*Ny
+    
+    matvecA(1)=alpha*X(1)+beta*X(2)+gamma*X(Nx+1)
+    do i=2,Nx-1
+       matvecA(i)=beta*X(i-1)+alpha*X(i)+beta*X(i+1)+gamma*X(i+Nx+1)
+    end do
+    matvecA(Nx)=beta*X(Nx-1)+alpha*X(i)+beta*X(i+1)+gamma*X(i+Nx+1)
+    
+
+  
+    do i=Nx+1,Nx+Nx
+       if (mod(i,Nx)==1) then
+          matvecA(i)=gamma*X(i-Nx)+alpha*X(Nx+1)+beta*X(Nx+2)+gamma*X(Nx+Nx+1)        
+       elseif (mod(i,Nx)==0))
+          matvecA(i)=gamma*X(i-Nx)
+       else
+          matvecA(i)=gamma*X(i-Nx)+beta*X(Nx+i-1)+alpha*X(i)+beta*X(i+1)+gamma*X(i+Nx+1)
+       end if
+    end do
+
+
+       matvecA(mod(i,Nx))=alpha*X(mod(i,Nx))+beta*X(mod(i+2),Nx))+gamma*X(mod(i,Nx))
+       !do from 2 to Nx*Ny
     
     do i=Nx+1,size(X)
        matvecA(i)=gamma*X(mod(i,Nx))+alpha*X(mod(i/Nx,Nx)*Nx+1  )+beta*X(mod(i+2),Nx))+gamma*X(mod(i,Nx))

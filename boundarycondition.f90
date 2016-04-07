@@ -37,5 +37,28 @@ contains
 
 
     end do
-
   end function createRHS
+
+subroutine cree_tableau_pas(T,a,b,h)
+    implicit none
+    real*8 ,intent(in)::a,b,h
+    real*8 ,dimension(:) ,allocatable,intent(inout)::T
+    integer::n,i
+    real*8::z
+    !n=floor((b-a)/h)+1
+    n=1
+    z=a
+    do while (z<b)
+       z=z+h
+       n=n+1
+    end do
+    allocate(T(n))
+    T(1)=a
+    do i=2,n 
+       T(i)=T(i-1)+h
+    end do
+  end subroutine cree_tableau_pas
+
+
+end module boundarycondition
+
