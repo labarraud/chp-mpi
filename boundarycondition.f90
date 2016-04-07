@@ -64,7 +64,7 @@ contains
     real*8 ,dimension(:),allocatable::X,Y
     real*8,dimension(:),allocatable::F,G,H,U,var
     real*8::Lx,Ly,dt,D
-    integer::Nx,Ny
+    integer::Nx,Ny,i
 
     call cree_tableau_pas(X,0.0d0,1.0d0,0.1d0)
     call cree_tableau_pas(Y,0.0d0,1.0d0,0.1d0)
@@ -91,16 +91,10 @@ contains
 
     var=createRHS(G,U,F,H,D,Lx,Ly,Nx,Ny,dt)
 
+    do i=1,size(var)
+       print*,'var',i,'//',var(i)
+    end do
 
-    ! print*,'X=',X
-    ! print*,'Y=',Y
-    ! print*,'F=',F
-    ! print*,'G=',G
-    ! print*,'H=',H
-    ! print*,'U=',U
-
-
-    print*,'RHS=',var
   end subroutine test_boundary_conditions
 end module boundarycondition
 
