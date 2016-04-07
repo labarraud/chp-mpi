@@ -2,7 +2,7 @@ FC = gfortran
 FCFLAGS=-g -fcheck=all -Warray-bounds
 
 PROG=chp
-SOURCES=  precision.o GradiantConj.o main.o
+SOURCES= precision.o  boundarycondition.o GradiantConj.o main.o
 
 all:$(PROG)
 

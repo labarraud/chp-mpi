@@ -9,29 +9,29 @@ contains
     real*8,intent(in)::D,Lx,Ly,dt
     integer,intent(in)::Nx,Ny
     real*8,intent(in),dimension(:)::G,U,F,H
-    real*8,dimension(:)::createRHS
+    real*8,dimension(Nx*Nx)::createRHS
     real*8::dx,dy
     integer::i,j
 
     dx=Lx/(1+Nx)
     dy=Ly/(1+Ny)
-    j=0
+    j=1
 
-    do i=0,size(F)
+    do i=1,size(F)
 
 
        createRHS(i)=F(i)+U(i)/dt
 
        if ( i-j == 0 ) then
           createRHS(i)=createRHS(i)-D*H(i)/(dy*dy)
-          j=j+Nx
+          j=j+Nx-1
        end if
 
-       if ( i < Nx ) then
+       if ( i < Nx+1 ) then
           createRHS(i)=createRHS(i)-D*G(i)/(dx*dx)
        end if
 
-       if ( i > Nx*(Ny-1)-1 ) then
+       if ( i > Nx*(Ny-1) ) then
           createRHS(i)=createRHS(i)-D*G(i)/(dx*dx)
        end if
 
@@ -39,7 +39,7 @@ contains
     end do
   end function createRHS
 
-subroutine cree_tableau_pas(T,a,b,h)
+  subroutine cree_tableau_pas(T,a,b,h)
     implicit none
     real*8 ,intent(in)::a,b,h
     real*8 ,dimension(:) ,allocatable,intent(inout)::T
