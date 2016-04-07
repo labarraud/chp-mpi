@@ -1,0 +1,41 @@
+module boundarycondition
+  implicit none
+
+
+contains
+
+  function createRHS(G,U,F,H,D,Lx,Ly,Nx,Ny,dt)
+    implicit none
+    real*8,intent(in)::D,Lx,Ly,dt
+    integer,intent(in)::Nx,Ny
+    real*8,intent(in),dimension(:)::G,U,F,H
+    real*8,dimension(:)::createRHS
+    real*8::dx,dy
+    integer::i,j
+
+    dx=Lx/(1+Nx)
+    dy=Ly/(1+Ny)
+    j=0
+
+    do i=0,size(F)
+
+
+       createRHS(i)=F(i)+U(i)/dt
+
+       if ( i-j == 0 ) then
+          createRHS(i)=createRHS(i)-D*H(i)/(dy*dy)
+          j=j+Nx
+       end if
+
+       if ( i < Nx ) then
+          createRHS(i)=createRHS(i)-D*G(i)/(dx*dx)
+       end if
+
+       if ( i > Nx*(Ny-1)-1 ) then
+          createRHS(i)=createRHS(i)-D*G(i)/(dx*dx)
+       end if
+
+
+    end do
+
+  end function createRHS
