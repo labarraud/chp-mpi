@@ -2,7 +2,7 @@ FC = gfortran
 FCFLAGS=-g -fcheck=all -Warray-bounds
 
 PROG=chp
-SOURCES= precision.o  GradiantConj.o boundarycondition.o GradiantConjAdapt.o main.o
+SOURCES= precision.o  GradiantConj.o boundarycondition.o GradiantConjAdapt.o writeX.o main.o
 
 all:$(PROG)
 
@@ -16,4 +16,4 @@ clean:
 	rm -f *.o *.mod
 
 cleanall:
-	rm -f $(PROG) *.o *.mod
+	rm -f $(PROG) *.o *.mod *.dat

@@ -11,11 +11,12 @@ contains
     real*8,intent(in),dimension(:)::G,U,F,H
     real*8,dimension(Nx*Nx)::createRHS
     real*8::dx,dy
-    integer::i,j
+    integer::i,j,k
 
     dx=Lx/(1+Nx)
     dy=Ly/(1+Ny)
     j=1
+    k=12
 
     do i=1,size(F)
 
@@ -24,7 +25,12 @@ contains
 
        if ( i-j == 0 ) then
           createRHS(i)=createRHS(i)-D*H(i)/(dy*dy)
-          j=j+Nx-1
+          j=j+Nx
+       end if
+
+       if ( i-k == 0 ) then
+          createRHS(i)=createRHS(i)-D*H(i)/(dy*dy)
+          k=k+Nx
        end if
 
        if ( i < Nx+1 ) then
@@ -79,7 +85,7 @@ contains
     ! G=F
     ! H=F
     G=0.
-    H=1.
+    H=(1./12)*(1./12)
     U=0.
     dt=12.
     Lx=1.0
