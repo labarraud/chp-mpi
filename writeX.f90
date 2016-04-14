@@ -6,22 +6,20 @@ module writeX
 
 contains
 
-  subroutine writevec(name,sta,Nx,X)
+  subroutine writevec(name,sta,Nx,U,dx,dy)
     implicit none
     character(len=*),intent(in)::name,sta
     integer,intent(in)::Nx
-    real*8,dimension(Nx*Nx),intent(in)::X
+    real*8,intent(in)::dx,dy
+    real*8,dimension(Nx*Nx),intent(in)::U
     integer::i,j
     open(unit=10,file=name,status=sta)
 
 
     do i=1,Nx
        do j=1,Nx
-
-          write(10,'(F18.6)',ADVANCE='NO') X( i+(j-1)*Nx )
-
+          write(10,*) dx*i,dy*j, U( i+(j-1)*Nx )
        end do
-       write(10,*)''
     end do
     close(10)
 
@@ -58,7 +56,7 @@ contains
 
     var=createRHS(G,U,F,H,D,Lx,Ly,Nx,Ny,dt)
 
-    call writevec('test.dat','unknown',Nx,var)
+    call writevec('test.dat','unknown',Nx,var,(Lx/(Nx+1)),(Ly/(Ny+1)))
 
   end subroutine test_writing
 

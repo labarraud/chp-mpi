@@ -35,7 +35,7 @@ contains
        R=R1
        d=R+varbeta*d
        n=n+1
-       print*,X
+       !print*,X
     end do
     
     deallocate(R)
@@ -72,58 +72,58 @@ contains
        if (mod(i,Nx)==1) then
           matvecA(i)=alpha*X(i)+beta*X(i+1)+gamma*X(i+Nx)
           !TEST
-          if (test) then
-             A(i,i)=intalpha
-             A(i,i+1)=intbeta
-             A(i,i+Nx)=intgamma
-          end if
+          !if (test) then
+          !   A(i,i)=intalpha
+          !   A(i,i+1)=intbeta
+          !   A(i,i+Nx)=intgamma
+          !end if
        else if (mod(i,Nx)==0)  then
           matvecA(i)=beta*X(i-1)+alpha*X(i)+gamma*X(i+Nx)
-          !TEST
-          if (test) then          
-             A(i,i-1)=intbeta
-             A(i,i)=intalpha
-             A(i,i+Nx)=intgamma
-          end if
+!!$          !TEST
+!!$          if (test) then          
+!!$             A(i,i-1)=intbeta
+!!$             A(i,i)=intalpha
+!!$             A(i,i+Nx)=intgamma
+!!$          end if
        else
           matvecA(i)=beta*X(i-1)+alpha*X(i)+beta*X(i+1)+gamma*X(i+Nx)
-          !TEST
-          if (test) then
-             A(i,i-1)=intbeta
-             A(i,i)=intalpha
-             A(i,i+1)=intbeta
-             A(i,i+Nx)=intgamma
-          end if
+          ! !TEST
+          ! if (test) then
+          !    A(i,i-1)=intbeta
+          !    A(i,i)=intalpha
+          !    A(i,i+1)=intbeta
+          !    A(i,i+Nx)=intgamma
+          ! end if
        end if
     end do
   
     do i=Nx+1,Nx*Nx-Nx
        if (mod(i,Nx)==1) then
           matvecA(i)=gamma*X(i-Nx)+alpha*X(i)+beta*X(i+1)+gamma*X(Nx+i)
-          !TEST
-          if (test) then
-             A(i,i-Nx)=intgamma
-             A(i,i)=intalpha
-             A(i,i+1)=intbeta
-             A(i,Nx+i)=intgamma
-          end if
+!!$          !TEST
+!!$          if (test) then
+!!$             A(i,i-Nx)=intgamma
+!!$             A(i,i)=intalpha
+!!$             A(i,i+1)=intbeta
+!!$             A(i,Nx+i)=intgamma
+!!$          end if
        else if (mod(i,Nx)==0)  then
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)+gamma*X(Nx+i)
-          !TEST
-          A(i,i-Nx)=intgamma
-          A(i,i-1)=intbeta
-          A(i,i)=intalpha
-          A(i,i+Nx)=intgamma
+!!$          !TEST
+!!$          A(i,i-Nx)=intgamma
+!!$          A(i,i-1)=intbeta
+!!$          A(i,i)=intalpha
+!!$          A(i,i+Nx)=intgamma
        else
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)+beta*X(i+1)+gamma*X(Nx+i)
           !TEST
-          if (test) then
-             A(i,i-Nx)=intgamma
-             A(i,i-1)=intbeta
-             A(i,i)=intalpha
-             A(i,i+1)=intbeta
-             A(i,Nx+i)=intgamma
-          end if
+!!$          if (test) then
+!!$             A(i,i-Nx)=intgamma
+!!$             A(i,i-1)=intbeta
+!!$             A(i,i)=intalpha
+!!$             A(i,i+1)=intbeta
+!!$             A(i,Nx+i)=intgamma
+!!$          end if
        end if
     end do
 
@@ -131,44 +131,44 @@ contains
     do i=Nx*Nx-Nx+1,Nx*Nx
        if (mod(i,Nx)==1) then
           matvecA(i)=gamma*X(i-Nx)+alpha*X(i)+beta*X(i-1)
-          !TEST
-          if (test) then
-             A(i,i-Nx)=intgamma
-             A(i,i)=intalpha
-             A(i,i+1)=intbeta
-          end if
+!!$          !TEST
+!!$          if (test) then
+!!$             A(i,i-Nx)=intgamma
+!!$             A(i,i)=intalpha
+!!$             A(i,i+1)=intbeta
+!!$          end if
        else if (mod(i,Nx)==0) then
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)
-          !TEST
-          if (test) then
-             A(i,i-Nx)=intgamma
-             A(i,i-1)=intbeta
-             A(i,i)=intalpha
-          end if
+!!$          !TEST
+!!$          if (test) then
+!!$             A(i,i-Nx)=intgamma
+!!$             A(i,i-1)=intbeta
+!!$             A(i,i)=intalpha
+!!$          end if
        else
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)+beta*X(i+1)
-          !TEST
-          if (test) then
-             A(i,i-Nx)=intgamma
-             A(i,i-1)=intbeta
-             A(i,i)=intalpha
-             A(i,i+1)=intbeta
-          end if
+!!$          !TEST
+!!$          if (test) then
+!!$             A(i,i-Nx)=intgamma
+!!$             A(i,i-1)=intbeta
+!!$             A(i,i)=intalpha
+!!$             A(i,i+1)=intbeta
+!!$          end if
        end if
     end do
     
-    !TEST
-    if (test) then
-       do i=1,Nx*Nx
-          do j=1,Nx*Nx
-             write(*,'(I2)', ADVANCE='NO') A(i,j) 
-          end do
-          print*,' ',X(i)
-       end do
-    end if
-
-    print*,matvecA
-   
+!!$    !TEST
+!!$    if (test) then
+!!$       do i=1,Nx*Nx
+!!$          do j=1,Nx*Nx
+!!$             write(*,'(I2)', ADVANCE='NO') A(i,j) 
+!!$          end do
+!!$          print*,' ',X(i)
+!!$       end do
+!!$    end if
+!!$
+!!$    print*,matvecA
+!!$   
   end function matvecA
 
 
@@ -216,8 +216,6 @@ contains
     do i=1,n*n
        print*,Y2(i)
     end do
-    
-    
   end subroutine test_gradconjA
 
   subroutine test_A(M,N)
