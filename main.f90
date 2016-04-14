@@ -5,15 +5,13 @@ program main
   use gradconjadapt
   use writeX
 
-
   implicit none
 
   call test_boundary_conditions()
 
-  call test_matvecA()
+  call test_gradconjA()
 
   call test_writing()
-  
 
 
 

@@ -23,11 +23,13 @@ contains
 
     X=0
     R=matvec(A,X)-B
+    print*,matvec(A,X)
     d=R
     n=0
     
     do while (n<Nl .and. norme2(R)>epsilon)
        w=matvec(A,d)
+       print*,matvec(A,d)
        alpha=prodscal(d,R)/prodscal(d,w)
        X=X-alpha*d
        R1=R-alpha*w
