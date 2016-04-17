@@ -5,14 +5,13 @@ module basicgradconj
   
 
 contains
-  subroutine gradconj(A,X,B,epsilon,Nl)
+  subroutine gradconj(A,X,B,epsilon)
     implicit none
     real(wp),intent(inout),dimension(:)::X
     real(wp),intent(in),dimension(:)::B
     real(wp),intent(in),dimension(:,:)::A
     real(wp),intent(in)::epsilon
     real(wp)::alpha,beta
-    integer,intent(in)::Nl
     real(wp),dimension(:),allocatable::R,R1,w,d
     integer::n
     
@@ -23,13 +22,11 @@ contains
 
     X=0
     R=matvec(A,X)-B
-    print*,matvec(A,X)
     d=R
     n=0
     
-    do while (n<Nl .and. norme2(R)>epsilon)
+    do while (n<size(B) .and. norme2(R)>epsilon)
        w=matvec(A,d)
-       print*,matvec(A,d)
        alpha=prodscal(d,R)/prodscal(d,w)
        X=X-alpha*d
        R1=R-alpha*w
@@ -37,7 +34,6 @@ contains
        R=R1
        d=R+beta*d
        n=n+1
-       print*,X
     end do
     
     deallocate(R)
@@ -50,8 +46,8 @@ contains
   function norme2(V)
     !compute norme of V
     implicit none
-    real*8,intent(in),dimension(:)::V
-    real*8::norme2
+    real(wp),intent(in),dimension(:)::V
+    real(wp)::norme2
     integer::i
     norme2=0;
     do i=1,size(V)
@@ -63,9 +59,9 @@ contains
   function matvec(A,X)
     !compute AX
     implicit none
-    real*8,intent(in),dimension(:,:)::A
-    real*8,intent(in),dimension(:)::X
-    real*8,dimension(size(X))::matvec
+    real(wp),intent(in),dimension(:,:)::A
+    real(wp),intent(in),dimension(:)::X
+    real(wp),dimension(size(X))::matvec
     integer::i,j
     
     do i=1,size(X)
@@ -79,14 +75,30 @@ contains
   function prodscal(X,Y)
     !compute XY
     implicit none
-    real*8,dimension(:)::X,Y
-    real*8::prodscal
+    real(wp),dimension(:)::X,Y
+    real(wp)::prodscal
     integer::i
     prodscal=0
     do i=1,size(X)
        prodscal=prodscal+X(i)*Y(i)
     end do
   end function prodscal
+
+  subroutine print_vect(name,V)
+    implicit none
+    real(wp),dimension(:),intent(in)::V
+    character(len=*),intent(in)::name
+    integer::i
+    character(len=2)::SPACE
+    
+    SPACE='  '
+    print*,name
+    do i=1,size(V)
+            write(*,'(E14.4)', ADVANCE='NO') V(i) 
+            write(*,'(A2)', ADVANCE='NO') SPACE
+    end do
+    print*,' '
+end subroutine print_vect
 
 
 end module basicgradconj

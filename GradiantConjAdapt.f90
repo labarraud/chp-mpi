@@ -20,7 +20,7 @@ contains
     allocate(R1(size(B)))
     allocate(w(size(B)))
     allocate(d(size(B)))
-    
+
     X=0.0d0
     R=matvecA(alpha,beta,gamma,Nx,X)-B
     d=R
@@ -35,7 +35,6 @@ contains
        R=R1
        d=R+varbeta*d
        n=n+1
-       !print*,X
     end do
     
     deallocate(R)
@@ -54,121 +53,43 @@ contains
     real(wp),intent(in),dimension(:)::X
     real(wp),dimension(size(X))::matvecA 
     integer,intent(in)::Nx
-    integer::i,j,intbeta,intalpha,intgamma
-    integer,dimension(:,:),allocatable::A
-    logical::test
+    integer::i,j
+    real(wp),dimension(:,:),allocatable::A
 
-    test=.true.
-    allocate(A(Nx*Nx,Nx*Nx))
-    A=0
-    intalpha=floor(alpha)
-    intbeta=floor(beta)
-    intgamma=floor(gamma)
-
-
+    matvecA=0.0d0
 
 
     do i=1,Nx
        if (mod(i,Nx)==1) then
           matvecA(i)=alpha*X(i)+beta*X(i+1)+gamma*X(i+Nx)
-          !TEST
-          !if (test) then
-          !   A(i,i)=intalpha
-          !   A(i,i+1)=intbeta
-          !   A(i,i+Nx)=intgamma
-          !end if
        else if (mod(i,Nx)==0)  then
           matvecA(i)=beta*X(i-1)+alpha*X(i)+gamma*X(i+Nx)
-!!$          !TEST
-!!$          if (test) then          
-!!$             A(i,i-1)=intbeta
-!!$             A(i,i)=intalpha
-!!$             A(i,i+Nx)=intgamma
-!!$          end if
        else
-          matvecA(i)=beta*X(i-1)+alpha*X(i)+beta*X(i+1)+gamma*X(i+Nx)
-          ! !TEST
-          ! if (test) then
-          !    A(i,i-1)=intbeta
-          !    A(i,i)=intalpha
-          !    A(i,i+1)=intbeta
-          !    A(i,i+Nx)=intgamma
-          ! end if
+          matvecA(i)=alpha*X(i)+beta*X(i-1)+beta*X(i+1)+gamma*X(i+Nx)
        end if
     end do
   
     do i=Nx+1,Nx*Nx-Nx
        if (mod(i,Nx)==1) then
           matvecA(i)=gamma*X(i-Nx)+alpha*X(i)+beta*X(i+1)+gamma*X(Nx+i)
-!!$          !TEST
-!!$          if (test) then
-!!$             A(i,i-Nx)=intgamma
-!!$             A(i,i)=intalpha
-!!$             A(i,i+1)=intbeta
-!!$             A(i,Nx+i)=intgamma
-!!$          end if
        else if (mod(i,Nx)==0)  then
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)+gamma*X(Nx+i)
-!!$          !TEST
-!!$          A(i,i-Nx)=intgamma
-!!$          A(i,i-1)=intbeta
-!!$          A(i,i)=intalpha
-!!$          A(i,i+Nx)=intgamma
        else
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)+beta*X(i+1)+gamma*X(Nx+i)
-          !TEST
-!!$          if (test) then
-!!$             A(i,i-Nx)=intgamma
-!!$             A(i,i-1)=intbeta
-!!$             A(i,i)=intalpha
-!!$             A(i,i+1)=intbeta
-!!$             A(i,Nx+i)=intgamma
-!!$          end if
        end if
     end do
 
     
     do i=Nx*Nx-Nx+1,Nx*Nx
        if (mod(i,Nx)==1) then
-          matvecA(i)=gamma*X(i-Nx)+alpha*X(i)+beta*X(i-1)
-!!$          !TEST
-!!$          if (test) then
-!!$             A(i,i-Nx)=intgamma
-!!$             A(i,i)=intalpha
-!!$             A(i,i+1)=intbeta
-!!$          end if
+          matvecA(i)=gamma*X(i-Nx)+alpha*X(i)+beta*X(i+1)
        else if (mod(i,Nx)==0) then
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)
-!!$          !TEST
-!!$          if (test) then
-!!$             A(i,i-Nx)=intgamma
-!!$             A(i,i-1)=intbeta
-!!$             A(i,i)=intalpha
-!!$          end if
        else
           matvecA(i)=gamma*X(i-Nx)+beta*X(i-1)+alpha*X(i)+beta*X(i+1)
-!!$          !TEST
-!!$          if (test) then
-!!$             A(i,i-Nx)=intgamma
-!!$             A(i,i-1)=intbeta
-!!$             A(i,i)=intalpha
-!!$             A(i,i+1)=intbeta
-!!$          end if
        end if
     end do
-    
-!!$    !TEST
-!!$    if (test) then
-!!$       do i=1,Nx*Nx
-!!$          do j=1,Nx*Nx
-!!$             write(*,'(I2)', ADVANCE='NO') A(i,j) 
-!!$          end do
-!!$          print*,' ',X(i)
-!!$       end do
-!!$    end if
-!!$
-!!$    print*,matvecA
-!!$   
+
   end function matvecA
 
 
@@ -179,7 +100,8 @@ contains
     real(wp)::eps
     integer::n,i
 
-    n=3
+    n=5
+
     eps=0.000001
 
     allocate(X1(n*n))
@@ -188,14 +110,12 @@ contains
     allocate(Y2(n*n))
     allocate(B(n*n))
 
-    B=2.0d0
+    B=1.0d0
 
-    print*,'---------Calcul classique de A ------'
-    call test_A(A,n)
+    print*,'---------Calcul classique avec  gradconj ------'
+    call test_A(100,-2,-1,A,n)
 
-    print*,A
-
-    call  gradconj(A,X1,B,eps,n)
+    call  gradconj(A,X1,B,eps)
 
     Y1=matmul(A,X1)
 
@@ -205,31 +125,35 @@ contains
         print*,Y1(i)
     end do
     
-    print*,'---------Calcul classique de Afonc ------'
+    print*,'---------Calcul classique de  gradconjA------'
 
-    call gradconjA(10.0d0,-2.0d0,-1.0d0,3,X2,B,eps)
+    call gradconjA(100.0d0,-2.0d0,-1.0d0,n,X2,B,eps)
     
     Y2=matmul(A,X2)
     
     !print Bfinal
     print*,'B2final='
     do i=1,n*n
-       print*,Y2(i)
+       print*,Y1(i),Y2(i),Y1(i)-Y2(i)
     end do
   end subroutine test_gradconjA
 
-  subroutine test_A(M,N)
+
+
+
+
+
+
+  subroutine test_A(intalpha,intbeta,intgamma,M,N)
     !test
     real(wp),dimension(:,:),allocatable,intent(out)::M
-    integer,intent(in)::n
+    integer,intent(in)::n,intbeta,intalpha,intgamma
     integer,dimension(:,:),allocatable::A
-    integer::i,j,intbeta,intalpha,intgamma
+    integer::i,j
     allocate(A(N*N,N*N))
     allocate(M(N*N,N*N))
-    A=0
-    intalpha=10
-    intbeta=-2
-    intgamma=-1 
+    A=0.0d0
+
     
     do i=1,N
        if (mod(i,N)==1) then
@@ -288,12 +212,70 @@ contains
   
   do i=1,N*N
      do j=1,N*N
-        write(*,'(I2)', ADVANCE='NO') A(i,j) 
+        write(*,'(I4)', ADVANCE='NO') A(i,j) 
      end do
      print*,' '
   end do
 
   M=A
 end subroutine test_A
+
+subroutine test_matvecA()
+  implicit none
+  real*8,dimension(:),allocatable::F1,G1,F2,G2
+  real*8,dimension(:,:),allocatable::A
+  integer::i,n
+  
+  n=5
+  
+  allocate (F1(n*n))
+  allocate (G1(n*n))
+  allocate (F2(n*n))
+  allocate (G2(n*n))
+
+  print*,"------- calcul matvecA -------"
+  
+  F1=0.000
+
+  do i=1,n*n
+     F1(i)=(i*0.1)**2
+  end do
+
+  G1=matvecA(100.0d0,-2.0d0,-1.0d0,n,F1)
+  print*,"X="
+  do i=1,n*n
+     print*,F1(i)
+  end do
+    print*,"Y="
+  do i=1,n*n
+     print*,G1(i)
+  end do
+  
+  print*,"------- calcul classique -------"
+  print*,"A="
+  call test_a(100,-2,-1,A,n)
+  
+  F2=F1
+
+  G2=matmul(A,F2)
+  
+  print*,"X="
+  do i=1,n*n
+     print*,F1(i),F2(i)
+  end do
+  
+  print*,"Y="
+  do i=1,n*n
+     print*,G1(i),G2(i),G1(i)-G2(i)
+  end do
+
+  deallocate (F1)
+  deallocate (G1)
+  deallocate (F2)
+  deallocate (G2)
+
+end subroutine test_matvecA
+
+
 
 end module gradconjadapt

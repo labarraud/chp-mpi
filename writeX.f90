@@ -15,7 +15,6 @@ contains
     integer::i,j
     open(unit=10,file=name,status=sta)
 
-
     do i=1,Nx
        do j=1,Nx
           write(10,*) dx*i,dy*j, U( i+(j-1)*Nx )
@@ -43,7 +42,7 @@ contains
     F=0.
     ! G=F
     ! H=F
-    G=(1./12)*(1./12)
+    G=2*(1./12)*(1./12)
     H=(1./12)*(1./12)
     U=0.
     dt=12.

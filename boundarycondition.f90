@@ -15,32 +15,22 @@ contains
 
     dx=Lx/(1+Nx)
     dy=Ly/(1+Ny)
-    j=1
-    k=12
-
+ 
     do i=1,size(F)
-
 
        createRHS(i)=F(i)+U(i)/dt
 
-       if ( i-j == 0 ) then
-          createRHS(i)=createRHS(i)-D*H(i)/(dy*dy)
-          j=j+Nx
-       end if
-
-       if ( i-k == 0 ) then
-          createRHS(i)=createRHS(i)-D*H(i)/(dy*dy)
-          k=k+Nx
+       if (mod(i,Nx) == 0) then
+          createRHS(i)=createRHS(i)+D*H((i/Nx)*2)/(dy*dy)
+       else if (mod(i,Nx) == 1) then
+          createRHS(i)=createRHS(i)+D*H(2*(i/Nx)+1)/(dy*dy)
        end if
 
        if ( i < Nx+1 ) then
-          createRHS(i)=createRHS(i)-D*G(i)/(dx*dx)
+          createRHS(i)=createRHS(i)+D*G(i)/(dx*dx)
+       else if (i> Nx*(Ny-1)) then
+          createRHS(i)=createRHS(i)+D*G(mod(i,Nx)+Nx)/(dx*dx)
        end if
-
-       if ( i > Nx*(Ny-1) ) then
-          createRHS(i)=createRHS(i)-D*G(i)/(dx*dx)
-       end if
-
 
     end do
   end function createRHS
@@ -84,7 +74,7 @@ contains
     F=1.
     ! G=F
     ! H=F
-    G=(1./13)*(1./13)
+    G=2*(1./13)*(1./13)
     H=(1./13)*(1./13)
     U=12
     dt=12.
