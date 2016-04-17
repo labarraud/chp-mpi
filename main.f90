@@ -7,23 +7,31 @@ program main
   
   implicit none
   real*8,dimension(:),allocatable::F,G,H,U,RHS
-  real*8::Lx,Ly,dt,dx,dy,D,x,y,alpha,beta,gamma,epsilon
-  integer::Nx,Ny,i,j
+  real*8::Lx,Ly,dt,dx,dy,D,x,y,alpha,beta,gamma,epsilon,t
+  integer::Nx,Ny,i,j,n,nt
 
-  call test_matvecA()
+  !------------------------------------------------------------------!
+  !-                                                                -!
+  !-                        TEST UNITAIRE                           -!
+  !-                                                                -!
+  !------------------------------------------------------------------!
 
-  call test_gradconjA()
+  !call test_matvecA()
+
+  !call test_gradconjA()
   
-  call test_boundary_conditions()
-  
+  !call test_boundary_conditions()
 
-  call test_writing()
-!!$
-  !------------------------------------------------------------------
-  !------------------------------------------------------------------
-  !------- PREMIER CAS --------
-  !------------------------------------------------------------------
-  !------------------------------------------------------------------
+  !call test_writing()
+
+
+
+  !------------------------------------------------------------------!
+  !-                                                                -!
+  !-                        PREMIER CAS TEST                        -!
+  !-                                                                -!
+  !------------------------------------------------------------------!
+  
   epsilon=0.00001
   Lx=1.0
   Ly=1.0
@@ -31,8 +39,8 @@ program main
   Ny=Nx
 
   allocate(F(Nx*Ny))
-  allocate(G(Nx*Ny))
-  allocate(H(Nx*Ny))
+  allocate(G(2*Nx))
+  allocate(H(2*Nx))
   allocate(U(Nx*Ny))
   allocate(RHS(Nx*Ny))
   
@@ -73,15 +81,18 @@ program main
   deallocate(U)
   deallocate(RHS)
 
-  !------------------------------------------------------------------
-  !------------------------------------------------------------------
-  !------- DEUXIEME CAS --------
-  !------------------------------------------------------------------
-  !------------------------------------------------------------------
+
+  
+  !------------------------------------------------------------------!
+  !-                                                                -!
+  !-                       DEUXIEME CAS TEST                        -!
+  !-                                                                -!
+  !------------------------------------------------------------------!
+
   epsilon=0.000001
   Lx=1.0
   Ly=1.0
-  Nx=150
+  Nx=10
   Ny=Nx
 
   allocate(F(Nx*Ny))
@@ -103,7 +114,6 @@ program main
      end do
   end do
 
-  call writevec('F2.dat','unknown',Nx,F,dx,dy)
   G=0.0d0
   H=0.0d0
 
@@ -128,8 +138,6 @@ program main
      y=dy*(i+1)
      H(2*i+1)=sin(x)+cos(y)
   end do  
-  
-  call print_vect("H",H) 
 
   !H droit
   do i=1,Ny
@@ -138,8 +146,6 @@ program main
      H(2*i)=sin(x)+cos(y)
   end do  
 
-call print_vect("H",H) 
-
   U=0.0d0
   dt=1
         
@@ -147,10 +153,7 @@ call print_vect("H",H)
   beta=-D/(dx*dx)
   gamma=-D/(dy*dy)
 
-
-    RHS = createRHS(G,U,F,H,D,Lx,Ly,Nx,Ny,dt)
-  call writevec('RHS2.dat','unknown',Nx,RHS,dx,dy)
-  do i=1,2
+  do i=1,10
      RHS = createRHS(G,U,F,H,D,Lx,Ly,Nx,Ny,dt)
      call gradconjA(alpha,beta,gamma,Nx,U,RHS,epsilon)
   end do
@@ -162,5 +165,82 @@ call print_vect("H",H)
   deallocate(H)
   deallocate(U)
   deallocate(RHS)
+
+
+  !------------------------------------------------------------------!
+  !-                                                                -!
+  !-                        TROISIEME CAS TEST                      -!
+  !-                                                                -!
+  !------------------------------------------------------------------!
+  
+  epsilon=0.00001
+  Lx=1.0
+  Ly=1.0
+  Nx=40
+  Ny=Nx
+  D=1.
+  dx=Lx/(Nx+1)
+  dy=dx
+
+  allocate(F(Nx*Ny))
+  allocate(G(2*Nx))
+  allocate(H(2*Nx))
+  allocate(U(Nx*Ny))
+  allocate(RHS(Nx*Ny))
+
+  G=0.0d0
+  H=1.0d0
+  U=0.0d0
+  dt=0.1
+        
+  alpha=(1./dt)+2*D*(1./(dx*dx)+1./(dy*dy))
+  beta=-D/(dx*dx)
+  gamma=-D/(dy*dy)
+  
+  n=1
+  do nt=1,5
+     t=n*dt
+     !create F
+     do i=1,Nx
+        do j=1,Ny    
+           x=dx*i
+           y=dy*j
+           F((i-1)*Nx+j)=exp(-(x-(Lx/2))**2)*exp(-(y-(Ly/2))**2)*cos((pi/2)*t)
+        end do
+     end do
+     
+     RHS = createRHS(G,U,F,H,D,Lx,Ly,Nx,Ny,dt)
+     call gradconjA(alpha,beta,gamma,Nx,U,RHS,epsilon)
+     n=n+1
+  end do
+  
+  call writevec('cas3_5.dat','unknown',Nx,U,dx,dy)
+  
+  print*,n*dt
+
+  do nt=1,60
+     t=n*dt
+     !create F
+     do i=1,Nx
+        do j=1,Ny    
+           x=dx*i
+           y=dy*j
+           F((i-1)*Nx+j)=exp(-(x-(Lx/2))**2)*exp(-(y-(Ly/2))**2)*cos((pi/2)*t)
+        end do
+     end do
+     
+     RHS = createRHS(G,U,F,H,D,Lx,Ly,Nx,Ny,dt)
+     call gradconjA(alpha,beta,gamma,Nx,U,RHS,epsilon)
+     n=n+1
+  end do
+  
+  call writevec('cas3_10.dat','unknown',Nx,U,dx,dy)
+  
+  deallocate(F)
+  deallocate(G)
+  deallocate(H)
+  deallocate(U)
+  deallocate(RHS)
+
 
 end program main
