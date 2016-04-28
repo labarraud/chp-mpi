@@ -28,8 +28,10 @@ contains
 
        if ( i < Nx+1 ) then
           createRHS(i)=createRHS(i)+D*G(i)/(dx*dx)
-       else if (i> Nx*(Ny-1)) then
+       else if (i<Nx*Ny .and. i> Nx*(Ny-1)) then
           createRHS(i)=createRHS(i)+D*G(mod(i,Nx)+Nx)/(dx*dx)
+       else if (i==Nx*Ny) then
+          createRHS(i)=createRHS(i)+D*G(2*Nx)/(dx*dx)
        end if
 
     end do
