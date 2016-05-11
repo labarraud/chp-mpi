@@ -59,4 +59,8 @@ Cela crée une image eps, par exemple dans le cas des paramètre de notre exempl
 
 ## Calcul de la charge, du speedup et de l'éfficacité
 
-Avant d'excuter le script shell `computestat.sh`, il faut paramettrer 
+Avant d'excuter le script shell `computestat.sh`, il faut paramettrer le nombre maximun de processeur pour lequel on veut calculer le speed up est la charge, valiable `max` ainsi que le chemin de l'executable `mpirun`. De plus, l'on peut modifier le nombre de fois que sera executer le programme pour un nombre de processeur donnée avec la variable `nbmoy`. Ces executions répétées sont faites pour s'abstraire des différentes interférances cosé par les processus externe qui ont tentence à intérompre 
+
+```shell
+$> gnuplot plotresult.gnu
+```
