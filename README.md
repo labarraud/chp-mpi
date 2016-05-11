@@ -55,27 +55,8 @@ $> gnuplot plotresult.gnu
 
 Cela crée une image eps, par exemple dans le cas des paramètre de notre exemple le résultat suivant :
 
-![myimage-alt-tag](http://labarraud.vvv.enseirb-matmeca.fr/ter2015/img/profil.jpg)
+![myimage-alt-tag](http://labarraud.vvv.enseirb-matmeca.fr/chp/plotresult.png)
 
-## Information
+## Calcul de la charge, du speedup et de l'éfficacité
 
-Screenshots of your application below:
-
-![Screenshot 1](http://placekitten.com/400/300)
-
-![Screenshot 2](http://placekitten.com/400/300)
-
-
-### Known Issues
-
-If you discover any bugs, feel free to create an issue on GitHub fork and
-send us a pull request.
-
-[Issues List](Github Issues List URL goes here).
-
-## Authors
-
-* Your Name (Your Github URL goes here)
-* Additional Author's name (Their Github URL goes here)
-
-
+Avant d'excuter le script shell `computestat.sh`, il faut paramettrer 
