@@ -11,24 +11,33 @@ Avant de compiler les sources, tout d'abord indiqué ou se trouve le chemin du c
 ```makefile
 FC=mpif90
 ```
-Ensuite, compiler les sources en executant la commande `Make` en étant positionée au sein de la racine du répertoire de projet. 
+Ensuite, compiler les sources en executant la commande `make` en étant positionée au sein de la racine du répertoire de projet. 
 ```console
 $> make
 ```
 
+## Fichier de configuration
 
-## Usage
+Au sein du fichier [param.txt] (https://github.com/labarraud/chp-mpi/blob/master/param.txt), indiquer selon la norme suivante les valeur des variables globales du problème, le chemain relatif du dossier où seront exporté les fichiers des solutions calculer par chaque processuset  le cas test choisi. 
 
-Run the generator:
+Par exemple si l'on souhaite inisialisé le programme à `epsilon=0.00001` (condition d'arrêt du grandiant conjugué), `Lx=1.0`, `Ly=1.0`, `Nx=10`, `Ny=10`, `D=1.0`, `dt=1.0`, `Nt=10`, pour le cas test 2 et que l'on souhaite que les fichiers solutions soit exporté dans le dossier `Result`, le fichier de configuration est le suivant :  
 
-```console
-rails generate my_example_gem:install
+```txt
+0.00001		!epsilon
+1.0	    	!Lx
+1.0	    	!Ly
+10    		!Nx
+10    		!Ny
+1.    		!D
+1.     		!dt
+10    		!Nt
+Result	  !folder result
+2       	!cas
 ```
 
-
 ## Usage
 
-Usage explanation goes here
+Un fois que le fichier [param.txt] (https://github.com/labarraud/chp-mpi/blob/master/param.txt)
 
 ```erb
 <%= your_code_goes @here do |f| %>
