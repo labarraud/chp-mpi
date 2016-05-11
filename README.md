@@ -1,16 +1,16 @@
 # Projet de Calcul Haute Performance
 
-[Logo](https://upload.wikimedia.org/wikipedia/fr/c/c6/%C3%89cole_nationale_sup%C3%A9rieure_d'%C3%A9lectronique,_informatique,_t%C3%A9l%C3%A9communications,_math%C3%A9matiques_et_m%C3%A9canique_de_Bordeaux,_Logo_2014.PNG)
-
 By [Clément DELIBES](https://github.com/Cle-md) and  [Laurent Barraud](https://github.com/labarraud)  
 
-[![Code Climate](Code Climate Badge IMG URL goes here)](Code Climate URL goes here)
-
 ## Description
-Projet de parallélisation de schéma numérique pour la résolution de l'équation de la chaleur en 2D au moyen de la bibliothèque open MPI.  
+Projet de parallélisation de schéma numérique pour la résolution de l'équation de la chaleur en 2D au moyen de la bibliothèque open MPI.  Projet réalisé au cours de l'option CHP (Calcul Hautes Performance) sous la supervision de Héloïse Beaugendre en 2eme Annee de l'ENSEIRB-MATMECA.
 
 ## Compilation
-Pour compiler les sources, tout d'
+Avant de compiler les sources, tout d'abord indiqué ou se trouve le chemin du compilateur `mpif90` dans la première ligne du [Makefile] (https://github.com/labarraud/chp-mpi/blob/master/Makefile), en initialisant la variable 'FC'
+
+```makefile
+FC=mpif90
+```
 
 ```ruby
 gem 'my_example_gem'
