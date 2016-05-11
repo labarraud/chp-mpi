@@ -16,6 +16,8 @@ Ensuite, compiler les sources en executant la commande `make` en étant position
 $> make
 ```
 
+Cette commande compilera tout les fichiers sources contenue dans le dossier [Src] (https://github.com/labarraud/chp-mpi/blob/master/Src), créra les fichiers objets et les modules dans les dossiers respectifs [Object] (https://github.com/labarraud/chp-mpi/blob/master/Object) et [Module] (https://github.com/labarraud/chp-mpi/blob/master/Module), et l'exécutable `chppar`
+
 ## Fichier de configuration
 
 Au sein du fichier [param.txt] (https://github.com/labarraud/chp-mpi/blob/master/param.txt), indiquer selon la norme suivante les valeur des variables globales du problème, le chemain relatif du dossier où seront exporté les fichiers des solutions calculer par chaque processuset  le cas test choisi. 
@@ -35,25 +37,25 @@ Result	  !folder result
 2       	!cas
 ```
 
-## Usage
+## Execution
 
-Un fois que le fichier [param.txt] (https://github.com/labarraud/chp-mpi/blob/master/param.txt)
+Une fois que le fichier [param.txt] (https://github.com/labarraud/chp-mpi/blob/master/param.txt) comfiguré, on exécute le programme au moyen de la commande `mpirun`, par exemple si l'on souhaite exécuter le programme sur 4 processeurs on tapera la commande suivante :
 
-```erb
-<%= your_code_goes @here do |f| %>
-  <%= f.input :example %>
-  <%= f.input :example %>
-  <%= f.button :example %>
-<% end %>
+```console
+$> mpirun -n 4 ./chpmpi
 ```
 
+## Visualisation des résultats
 
-## Configuration
+Les fichiers résultats `.dat`  sont créé dans le dossier `Result` pour visualiser le résultat sous la forme de graphique il suffit juste d'excécuter le script gnuplot `plotresult.gnu` créé lors de l'exécution du programme.
 
-This block of text should explain how to configure your application:
+```console
+$> gnuplot plotresult.gnu
+```
 
-`rails generate my_example_gem:install`
+Cela crée une image eps, par exemple dans le cas des paramètre de notre exemple le résultat suivant :
 
+![myimage-alt-tag](http://labarraud.vvv.enseirb-matmeca.fr/ter2015/img/profil.jpg)
 
 ## Information
 
