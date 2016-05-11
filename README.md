@@ -6,21 +6,18 @@ By [Clément DELIBES](https://github.com/Cle-md) and  [Laurent Barraud](https://
 Projet de parallélisation de schéma numérique pour la résolution de l'équation de la chaleur en 2D au moyen de la bibliothèque open MPI.  Projet réalisé au cours de l'option CHP (Calcul Hautes Performance) sous la supervision de Héloïse Beaugendre en 2eme Annee de l'ENSEIRB-MATMECA.
 
 ## Compilation
-Avant de compiler les sources, tout d'abord indiqué ou se trouve le chemin du compilateur `mpif90` dans la première ligne du [Makefile] (https://github.com/labarraud/chp-mpi/blob/master/Makefile), en initialisant la variable 'FC'
+Avant de compiler les sources, tout d'abord indiqué ou se trouve le chemin du compilateur `mpif90` dans la première ligne du [Makefile] (https://github.com/labarraud/chp-mpi/blob/master/Makefile), en initialisant la variable `FC`
 
 ```makefile
 FC=mpif90
 ```
-
-```ruby
-gem 'my_example_gem'
-```
-
-Run the following command to install it:
-
+Ensuite, compiler les sources en executant la commande `Make` en étant positionée au sein de la racine du répertoire de projet. 
 ```console
-bundle install
+$> make
 ```
+
+
+## Usage
 
 Run the generator:
 
