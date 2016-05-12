@@ -59,12 +59,9 @@ Cela créé une image eps. A titre d'exemple, et en gardant les paramètres expl
 
 ## Calcul de la charge, du speedup et de l'éfficacité
 
-Avant d'excuter le script shell `computestat.sh`, il faut paramétrer 
+Avant d'excuter le script shell `computestat.sh`, il faut paramétrer le nombre maximum de processeurs pour lesquels on veut calculer le speed up et la charge, la variable `max` ainsi que le chemin de l'exécutable `mpirun`. De plus, on peut modifier le nombre de fois que sera exécuté le programme pour un nombre de processeurs donné avec la variable `nbmoy`. Ces executions répétées sont faites pour se soustraire au xdifférentes interférences causées par les processus externes qui ont tendance à interrompre l'exécution des processus du programme et augmenter le temps d'exécution. En prenant le minimum de la charge maximun pour un nombre de processeurs donné on s'approche au plus près de la charge maximum réelle.
 
-
-Avant d'excuter le script shell `computestat.sh`, il faut paramettrer le nombre maximun de processeur pour lequel on veut calculer le speed up est la charge, valiable `max` ainsi que le chemin de l'executable `mpirun`. De plus, l'on peut modifier le nombre de fois que sera executer le programme pour un nombre de processeur donnée avec la variable `nbmoy`. Ces executions répétées sont faites pour s'abstraire des différentes interférances causé par les processus externe qui ont tentence à interrompre l'execution des processus du programme est augmenté le temps d'excusion. En prennant le minimum de la charge maximun pour un nombre de processeur données ont s'approchera au mieux de la charge maximun réel.
-
-Pour un `max = 20`, `nbmax=10` et une chemin de l'executatble mpirun `mpirun` on aura comme début de script :
+Pour un `max = 20`, `nbmax=10` et un chemin de l'executatble mpirun `mpirun` on aura comme début de script :
 
 ```shell
 #!/bin/bash
@@ -76,7 +73,7 @@ mpirun="mpirun"
 (...)
 ```
 
-Ensuite on donnera au script l'autorisation de s'exécuté par la commande :
+Ensuite on donnera au script l'autorisation de s'exécuter par la commande :
 
 ```console
 $> chmod +x computestat.sh
@@ -88,4 +85,4 @@ Enfin on executera le script :
 $> ./computestat.sh
 ```
 
-Les resultats de la charge (temps d'excution), du speedup et de l'éfficacité se trouveront respectivement dans les fichiers créés `time.dat`, `speedup.dat` et `efficacite.dat`
+Les résultats de la charge (temps d'exécution), du speedup et de l'éfficacité se trouveront respectivement dans les fichiers créés `time.dat`, `speedup.dat` et `efficacite.dat`
