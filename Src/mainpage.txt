@@ -1,0 +1,8 @@
+/**
+@mainpage Document Title 
+
+@section Introduction
+
+ Projet de parallélisation de schéma numérique pour la résolution de l'équation de la chaleur en 2D au moyen de la bibliothèque open MPI. Projet réalisé au cours de l'option CHP (Calcul Hautes Performance) sous la supervision de Héloïse Beaugendre en 2eme Annee de l'ENSEIRB-MATMECA.
+
+*/
