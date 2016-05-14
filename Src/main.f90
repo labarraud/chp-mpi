@@ -10,7 +10,7 @@ program main
   real*8::Lx,Ly,dt,dx,dy,D,x,y,alpha,beta,gamma,epsilon,t,starttime,endtime
   character*20::nameresult,namestat
   character(len=:), allocatable::folderresult,folderstat
-  integer::Nx,Ny,i,j,n,nt,statinfo,Me,Np,i1,i2,imin,imax,jmin,jmax,cas
+  integer::Nx,Ny,i,j,n,nt,statinfo,Me,Np,i1,i2,ivar,cas
 
   
   call MPI_INIT(statinfo)
@@ -32,7 +32,7 @@ program main
 
 
 
-  allocate(F(Nx*Ny))
+  allocate(F(i1:i2))
   allocate(G(2*Nx))
   allocate(H(2*Ny))
   allocate(U(max(i1-Nx,1):min(Nx*Ny,i2+Nx)))
@@ -49,13 +49,12 @@ program main
      !------------------------------------------------------------------!
      
      !Creation de F
-     
-     do i=1,Nx
-        do j=1,Ny
-           x=dx*i
-           y=dy*j
-           F((j-1)*Nx+i)=2*(x-x*x+y-y*y)
-        end do
+     do ivar=i1,i2
+        j=1+(ivar-1)/Nx
+        i=1+mod(ivar-1,Nx)
+        x=dx*i
+        y=dy*j
+        F((j-1)*Nx+i)=2*(x-x*x+y-y*y)
      end do
      
      
@@ -86,12 +85,12 @@ program main
      
      
      !Creation de F
-     do i=1,Nx
-        do j=1,Ny    
-           x=dx*i
-           y=dy*j
-           F(i+(j-1)*Nx)=sin(x)+cos(y)
-        end do
+     do ivar=i1,i2
+        j=1+(ivar-1)/Nx
+        i=1+mod(ivar-1,Nx)   
+        x=dx*i
+        y=dy*j
+        F(i+(j-1)*Nx)=sin(x)+cos(y)
      end do
      
      G=0.0d0
@@ -165,13 +164,14 @@ program main
      do nt=1,Nt
         t=n*dt
         !creation de F
-        do i=1,Nx
-           do j=1,Ny    
-              x=dx*i
-              y=dy*j
-              F((j-1)*Nx+i)=exp(-(x-(Lx/2))**2)*exp(-(y-(Ly/2))**2)*cos((pi/2)*t)
-           end do
+        do ivar=i1,i2
+           j=1+(ivar-1)/Nx
+           i=1+mod(ivar-1,Nx)   
+           x=dx*i
+           y=dy*j
+           F((j-1)*Nx+i)=exp(-(x-(Lx/2))**2)*exp(-(y-(Ly/2))**2)*cos((pi/2)*t)
         end do
+       
         
         RHS = createRHS(G,U(i1:i2),F(i1:i2),H,D,Lx,Ly,Nx,Ny,dt,i1,i2,Me)
         call gradconjA(alpha,beta,gamma,Nx,Ny,U(max(i1-Nx,1):min(Nx*Ny,i2+Nx)),RHS(i1:i2),epsilon,Me,i1,i2,Np)
