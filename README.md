@@ -86,3 +86,24 @@ $> ./computestat.sh
 ```
 
 Les résultats de la charge (temps d'exécution), du speedup et de l'éfficacité se trouveront respectivement dans les fichiers créés `time.dat`, `speedup.dat` et `efficacite.dat`
+
+## Generation de la documentation Doxygen
+Pour generer, la documentation Doxygen, il suffit d'excuter le `make` avec l'option `doc`
+
+```console
+$> make doc
+```
+Cela generera la documentation en html dans le dossier `Doc` de la racine
+
+## Désinstalation
+La commande suivante permet de supprimer toutes les objects `.o` et les modules `.mod` :
+```console
+$> make clean
+```
+La commande suivante permet de supprimer toutes les objects `.o`, les modules `.mod`, l'executable `chppar` ainsi que les fichier crée par l'excutable `.dat`, `.eps` et l'ensemble de la documentaion :
+```console
+$> make cleanall
+```
+
+
+
