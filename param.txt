@@ -1,10 +1,10 @@
 0.00001		!epsilon
 1.0		!Lx
 1.0		!Ly
-300		!Nx
-300		!Ny
+10		!Nx
+10		!Ny
 1.		!D
 1		!dt
 10		!Nt
 Result	!folder result
-1	!cas
+2	!cas
